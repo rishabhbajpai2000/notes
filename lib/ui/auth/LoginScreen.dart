@@ -1,5 +1,6 @@
-import 'dart:ffi';
 
+
+import 'package:contacts/services/session.dart';
 import 'package:contacts/ui/auth/signUpScreen.dart';
 import 'package:contacts/widgets/RoundButton.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../utils/Utils.dart';
+import '../FirebaseDatabase/contacts_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -26,29 +28,37 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       loading = true;
     });
-    _auth
-        .signInWithEmailAndPassword(
-            email: emailController.text,
-            password: passwordController.text.toString())
-        .then((value) {
-      Utils().toastMessage(value.user!.email.toString());
-      // Navigator.push(
-      //     context, MaterialPageRoute(builder: (context) => PostScreen()));
+
+    try {
+      _auth
+          .signInWithEmailAndPassword(
+              email: emailController.text,
+              password: passwordController.text.toString())
+          .then((value) {
+        SessionController().userId = value.user!.uid.toString();
+        Utils().toastMessage(value.user!.email.toString());
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => ContactsScreen()));
+        setState(() {
+          loading = false;
+        });
+      }).onError((error, stackTrace) {
+        debugPrint(error.toString());
+        Utils().toastMessage(error.toString());
+        setState(() {
+          loading = false;
+        });
+      });
+    } catch (e) {
+      Utils().toastMessage(e.toString());
       setState(() {
         loading = false;
       });
-    }).onError((error, stackTrace) {
-      debugPrint(error.toString());
-      Utils().toastMessage(error.toString());
-      setState(() {
-        loading = false;
-      });
-    });
+    }
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     emailController.dispose();
     passwordController.dispose();

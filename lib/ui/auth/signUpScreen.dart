@@ -4,6 +4,8 @@ import 'package:contacts/widgets/RoundButton.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../services/session.dart';
+
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
 
@@ -28,6 +30,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             email: emailController.text.toString(),
             password: passwordController.text.toString())
         .then((value) {
+      SessionController().userId = value.user!.uid.toString();
       setState(() {
         loading = false;
       });

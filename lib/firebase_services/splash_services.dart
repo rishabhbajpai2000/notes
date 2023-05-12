@@ -4,7 +4,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../ui/auth/login_screen.dart';
+import '../UI/auth/LoginScreen.dart';
+
 
 class SplashServices{
   void isLogin(BuildContext context){
