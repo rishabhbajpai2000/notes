@@ -1,5 +1,4 @@
 import 'package:contacts/ui/FirebaseDatabase/newContact.dart';
-import 'package:contacts/ui/auth/login_screen.dart';
 import 'package:contacts/utils/Utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -7,6 +6,7 @@ import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 
 import '../../services/session.dart';
+import '../auth/LoginScreen.dart';
 
 class ContactsScreen extends StatefulWidget {
   const ContactsScreen({super.key});
@@ -147,5 +147,3 @@ class _ContactsScreenState extends State<ContactsScreen> {
   }
 }
 
-
-// required format of phone number
