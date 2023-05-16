@@ -15,12 +15,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(colorScheme: ColorScheme.fromSwatch().copyWith(
 
-        primary: const Color(0xFF3a243b),
-        secondary: const Color(0xFF3a243b),
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSwatch().copyWith(
+          primary: Colors.orange,
+          secondary:Colors.orange
+        ),
+      ),
 
-      ),),
       home: SplashScreen(),
     );
   }

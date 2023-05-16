@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:contacts/services/session.dart';
-import 'package:contacts/ui/FirebaseDatabase/CompletedNotes.dart';
+import 'package:contacts/ui/FirebaseDatabase/NotesView.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 

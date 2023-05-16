@@ -1,3 +1,4 @@
+import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:contacts/ui/FirebaseDatabase/NewNote.dart';
 import 'package:contacts/utils/Utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,7 +11,6 @@ import '../auth/LoginScreen.dart';
 
 class CompletedNotes extends StatefulWidget {
   const CompletedNotes({super.key});
-
   @override
   State<CompletedNotes> createState() => _CompletedNotesState();
 }
@@ -20,17 +20,19 @@ class _CompletedNotesState extends State<CompletedNotes> {
   final editDescriptionController = TextEditingController();
   final dateController = TextEditingController();
   final priorityController = TextEditingController();
+  int bottomNavIndex = 0;
 
   FirebaseAuth auth = FirebaseAuth.instance;
-  DatabaseReference databaseRef =
+  DatabaseReference taskReference =
       FirebaseDatabase.instance.ref(SessionController().userId);
 
-  Future<void> showMyDialog(DataSnapshot snapshot) async {
+  Future<void> showUpdateDialog(DataSnapshot snapshot) async {
     editTitleController.text = snapshot.child("Title").value.toString();
     editDescriptionController.text =
         snapshot.child("Description").value.toString();
     dateController.text = snapshot.child("DueDate").value.toString();
     priorityController.text = snapshot.child("Priority").value.toString();
+
     return showDialog(
         context: context,
         builder: ((context) {
@@ -104,13 +106,13 @@ class _CompletedNotesState extends State<CompletedNotes> {
               TextButton(
                   onPressed: () {
                     Navigator.pop(context);
-                    databaseRef
+                    taskReference
                         .child(snapshot.child("id").value.toString())
                         .update({
                       'Description': editDescriptionController.text.toString(),
                       "Title": editTitleController.text.toString(),
                       "DueDate": dateController.text.toString(),
-                      "Priority": priorityController.text.toString()
+                      "Priority": int.parse(priorityController.text)
                     }).then((value) {
                       Utils().toastMessage("Note Updated ");
                     }).onError((error, stackTrace) {
@@ -125,19 +127,10 @@ class _CompletedNotesState extends State<CompletedNotes> {
 
   @override
   Widget build(BuildContext context) {
+    List<IconData> iconList = [Icons.check_box, Icons.check_box_outline_blank];
 
-    var iconList;
     return Scaffold(
-      bottomNavigationBar: AnimatedBottomNavigationBar(
-        icons: iconList,
-        activeIndex: _bottomNavIndex,
-        gapLocation: GapLocation.center,
-        notchSmoothness: NotchSmoothness.verySmoothEdge,
-        leftCornerRadius: 32,
-        rightCornerRadius: 32,
-        onTap: (index) => setState(() => _bottomNavIndex = index),
-        //other params
-      ),
+
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text("Notes"),
@@ -159,15 +152,23 @@ class _CompletedNotesState extends State<CompletedNotes> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => const NewNote()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const NewNote()));
         },
         child: const Icon(Icons.add),
       ),
-      body: Column(children: [
-        Expanded(
-            child: FirebaseAnimatedList(
-          query: databaseRef.orderByChild("Priority"),
+
+      body: completedTasks(),
+    );
+  }
+
+  Column completedTasks() {
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Expanded(
+          child: Padding(
+        padding: const EdgeInsets.only(top: 8.0),
+        child: FirebaseAnimatedList(
+          query: taskReference.orderByChild("Priority"),
           itemBuilder: (context, snapshot, animation, index) {
             return ListTile(
               leading: Text(
@@ -197,11 +198,9 @@ class _CompletedNotesState extends State<CompletedNotes> {
                     value: 1,
                     child: ListTile(
                       onTap: () {
-                        databaseRef
+                        taskReference
                             .child(snapshot.child("id").value.toString())
-                            .update({
-                          "Completed":true
-                        }).then((value) {
+                            .update({"Completed": true}).then((value) {
                           Utils().toastMessage("Note Updated ");
                         }).onError((error, stackTrace) {
                           Utils().toastMessage(error.toString());
@@ -216,7 +215,7 @@ class _CompletedNotesState extends State<CompletedNotes> {
                     child: ListTile(
                       onTap: () {
                         Navigator.pop(context);
-                        showMyDialog(snapshot);
+                        showUpdateDialog(snapshot);
                       },
                       leading: const Icon(Icons.edit),
                       title: const Text('Edit'),
@@ -228,7 +227,7 @@ class _CompletedNotesState extends State<CompletedNotes> {
                       onTap: () {
                         Navigator.pop(context);
                         // Perform delete action
-                        databaseRef
+                        taskReference
                             .child(snapshot.child('id').value.toString())
                             .remove()
                             .then((value) {})
@@ -244,57 +243,8 @@ class _CompletedNotesState extends State<CompletedNotes> {
               ),
             );
           },
-        ))
-      ]),
-    );
-  }
-
-  void showDetails(BuildContext context, DataSnapshot snapshot) {
-    showModalBottomSheet(
-        context: context,
-        builder: (BuildContext bc) {
-          return Container(
-            decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(25.0),
-                    topRight: Radius.circular(25.0))),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Center(
-                      child: Text(
-                        snapshot.child("Title").value.toString(),
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Due Date: ${snapshot.child("DueDate").value}',
-                    style: const TextStyle(fontSize: 15),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    'Priority: ${snapshot.child("Priority").value}',
-                    style: const TextStyle(fontSize: 15),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    'Description: ${snapshot.child("Description").value}',
-                    style: const TextStyle(fontSize: 15),
-                  ),
-                ],
-              ),
-            ),
-          );
-        });
+        ),
+      ))
+    ]);
   }
 }

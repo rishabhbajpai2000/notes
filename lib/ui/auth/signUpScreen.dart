@@ -1,4 +1,4 @@
-import 'package:contacts/ui/FirebaseDatabase/CompletedNotes.dart';
+import 'package:contacts/ui/FirebaseDatabase/NotesView.dart';
 import 'package:contacts/utils/Utils.dart';
 import 'package:contacts/widgets/RoundButton.dart';
 import 'package:firebase_auth/firebase_auth.dart';

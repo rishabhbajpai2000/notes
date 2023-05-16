@@ -20,7 +20,7 @@ class _NewNoteState extends State<NewNote> {
   final _dateController = TextEditingController();
   final _priorityController = TextEditingController();
 
-  DatabaseReference databaseref =
+  DatabaseReference databaseRef =
       FirebaseDatabase.instance.ref(SessionController().userId);
 
   @override
@@ -98,7 +98,8 @@ class _NewNoteState extends State<NewNote> {
               onTap: () {
                 Navigator.pop(context);
                 String id  = DateTime.now().millisecondsSinceEpoch.toString();
-                databaseref.child(id).set({
+                // True and false denote the completeness of the task.
+                databaseRef.child(id).set({
                   "id":id,
                   "Title": titleController.text.toString(),
                   "Description": descriptionController.text.toString(),
