@@ -30,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
           AnimatedTextKit(
             animatedTexts: [
               TypewriterAnimatedText(
-                'Contacts',
+                'Notes',
                 cursor: "",
                 textStyle: const TextStyle(
                   fontSize: 32.0,

@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../utils/Utils.dart';
-import '../FirebaseDatabase/ContactsScreen.dart';
+import '../FirebaseDatabase/CompletedNotes.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -38,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
         SessionController().userId = value.user!.uid.toString();
         Utils().toastMessage(value.user!.email.toString());
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => ContactsScreen()));
+            context, MaterialPageRoute(builder: (context) => CompletedNotes()));
         setState(() {
           loading = false;
         });

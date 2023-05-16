@@ -1,10 +1,10 @@
+import 'package:contacts/ui/FirebaseDatabase/CompletedNotes.dart';
 import 'package:contacts/utils/Utils.dart';
 import 'package:contacts/widgets/RoundButton.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../services/session.dart';
-import '../FirebaseDatabase/ContactsScreen.dart';
 import 'LoginScreen.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -33,7 +33,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         .then((value) {
       SessionController().userId = value.user!.uid.toString();
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => ContactsScreen()));
+          context, MaterialPageRoute(builder: (context) => CompletedNotes()));
       setState(() {
         loading = false;
       });

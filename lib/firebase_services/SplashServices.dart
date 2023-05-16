@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:contacts/services/session.dart';
+import 'package:contacts/ui/FirebaseDatabase/CompletedNotes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../UI/FirebaseDatabase/ContactsScreen.dart';
 import '../UI/auth/LoginScreen.dart';
 
 class SplashServices {
@@ -22,7 +22,7 @@ class SplashServices {
       Timer(
           const Duration(seconds: 3),
           () => Navigator.push(context,
-              MaterialPageRoute(builder: (context) => ContactsScreen())));
+              MaterialPageRoute(builder: (context) => CompletedNotes())));
     }
   }
 }
