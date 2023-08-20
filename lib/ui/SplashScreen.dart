@@ -26,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
 
-          Image.asset("assets/logo2.png", width: 100, height: 100,),
+          Image.asset("assets/logo.jpeg", width: 100, height: 100,),
           AnimatedTextKit(
             animatedTexts: [
               TypewriterAnimatedText(
@@ -35,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 textStyle: const TextStyle(
                   fontSize: 32.0,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xff3a243b)
+                  color: Colors.orange
                 ),
                 speed: const Duration(milliseconds: 250),
               ),

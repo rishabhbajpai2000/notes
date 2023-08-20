@@ -130,7 +130,6 @@ class _CompletedNotesState extends State<CompletedNotes> {
     List<IconData> iconList = [Icons.check_box, Icons.check_box_outline_blank];
 
     return Scaffold(
-
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text("Notes"),
@@ -157,7 +156,6 @@ class _CompletedNotesState extends State<CompletedNotes> {
         },
         child: const Icon(Icons.add),
       ),
-
       body: completedTasks(),
     );
   }
